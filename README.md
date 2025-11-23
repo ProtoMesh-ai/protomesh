@@ -54,6 +54,29 @@ export GOOGLE_API_KEY=your_key_here
 python protomesh/examples/demo_workflow.py
 ```
 
+#### Execution Flow ([demo_workflow.py](./protomesh/examples/demo_workflow.py))
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant CrewAI
+    participant ProtoMesh
+    participant LangGraph
+
+    User->>CrewAI: Kickoff researcher task
+    CrewAI->>ProtoMesh: write("research_topic", {...})
+    ProtoMesh->>ProtoMesh: Check AllowListPolicy
+    ProtoMesh->>ProtoMesh: Increment version (v1)
+    ProtoMesh->>ProtoMesh: Emit trace: state_update
+    CrewAI-->>User: Task complete
+    User->>LangGraph: Invoke workflow
+    LangGraph->>ProtoMesh: read("research_topic")
+    ProtoMesh-->>LangGraph: Return entity (v1)
+    LangGraph->>LangGraph: Summarize topic
+    LangGraph-->>User: Final result
+```
+
+
 ## Testing
 
 Run unit tests:
